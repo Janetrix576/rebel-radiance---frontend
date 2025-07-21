@@ -9,7 +9,7 @@ const locations = [
   { name: "Rachuonyo", price: 750.0 },
   { name: "Diani", price: 770.0 },
   { name: "Kapenguria", price: 780.0 },
-  { name: "Klifi", price: 800.0 },
+  { name: "Kilifi", price: 800.0 },
   { name: "Wundanyi", price: 800.0 },
   { name: "Malindi", price: 840.0 },
   { name: "Mwatate", price: 840.0 },
@@ -129,33 +129,47 @@ const locations = [
   { name: "Baraton", price: 700.0 },
   { name: "Homabay", price: 700.0 },
   { name: "Nzoia", price: 710.0 },
-  { name: "Mbita", price: 720.0 },
+  { name: "Mbita", price: 720.0 }
 ];
 
-const Checkout = ({ onCompleteOrder }) => {
+const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const cartItems = location.state?.cartItems || [];
+
   const [selectedLocation, setSelectedLocation] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [secondName, setSecondName] = useState('');
+  const [phone, setPhone] = useState('');
 
   const shippingCost = () => {
     const match = locations.find((loc) => loc.name === selectedLocation);
     return match ? match.price : 0;
   };
 
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const total = subtotal + shippingCost();
 
+  const isFormValid = firstName && secondName && phone && selectedLocation;
+
+  const handleCompleteOrder = () => {
+    if (isFormValid) {
+      console.log("Order Submitted", { firstName, secondName, phone, cartItems, selectedLocation, total });
+      alert("Order submitted successfully!");
+    }
+  };
+
+  const handleCancelOrder = () => {
+    navigate("/");
+  };
+
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#3ed8ff] via-[#7c4dff] to-[#a864fd] text-white">
         <div className="text-center">
-          <h2 className="text-xl font-serif text-[#900000] mb-4">Your cart is empty</h2>
-          <button onClick={() => navigate("/")} className="px-4 py-2 bg-[#900000] text-white rounded hover:bg-red-700">
+          <h2 className="text-xl font-bold mb-4">Your cart is empty</h2>
+          <button onClick={() => navigate("/")} className="px-4 py-2 bg-white text-[#7c4dff] font-semibold rounded">
             Back to Home
           </button>
         </div>
@@ -164,75 +178,69 @@ const Checkout = ({ onCompleteOrder }) => {
   }
 
   return (
-    <div className="min-h-screen flex items-start justify-center bg-gray-100 py-12 px-4">
-      <div className="w-full sm:max-w-md bg-white mt-10 rounded-lg shadow-lg p-6 font-serif">
-        <button onClick={() => navigate("/")} className="flex items-center text-[#900000] hover:text-red-700 transition text-sm mb-4">
-          <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-          Back to Home
-        </button>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#3ed8ff] via-[#7c4dff] to-[#a864fd] p-6">
+      <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-lg text-gray-800">
+        <h1 className="text-3xl font-bold text-center text-[#7c4dff] mb-6">Rebel Radiance Checkout</h1>
 
-        <h1 className="text-2xl font-bold text-center text-[#900000] mb-6">Mkurugenzi Merche</h1>
-
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold text-[#900000]">Your Items</h2>
-            {cartItems.map((item, index) => (
-              <div key={index} className="mb-2 text-sm text-gray-700">
-                {item.title} × {item.quantity} 
-                <span className="text-gray-600">
-                  {" "}({item.size || "N/A"})
-                </span> 
-                @ Ksh {item.price.toFixed(2)} ={" "}
-                <span className="font-semibold">
-                  Ksh {(item.price * item.quantity).toFixed(2)}
-                </span>
-              </div>
-            ))}
-
+        <div className="grid gap-4 mb-4">
+          <input
+            className="p-2 border border-gray-300 rounded placeholder-gray-500"
+            type="text"
+            placeholder="First Name*"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <input
+            className="p-2 border border-gray-300 rounded placeholder-gray-500"
+            type="text"
+            placeholder="Second Name*"
+            value={secondName}
+            onChange={(e) => setSecondName(e.target.value)}
+          />
+          <input
+            className="p-2 border border-gray-300 rounded placeholder-gray-500"
+            type="text"
+            placeholder="Phone Number*"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
         </div>
 
-        <div className="mb-6">
-          <label htmlFor="location" className="block text-[#900000] mb-1">
-            Select Delivery Location:
-          </label>
-          <select id="location" value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)} className="w-full border border-[#900000] rounded-md p-2 text-[#900000] bg-white">
-            <option value="">-- Select a location --</option>
-            {locations.map((loc, idx) => (
-              <option key={idx} value={loc.name}>
-                {loc.name} - Ksh {loc.price.toFixed(2)}
-              </option>
-            ))}
-          </select>
+        <select
+          value={selectedLocation}
+          onChange={(e) => setSelectedLocation(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded mb-4"
+        >
+          <option value="">-- Select a location --</option>
+          {locations.map((loc, idx) => (
+            <option key={idx} value={loc.name}>
+              {loc.name} - Ksh {loc.price.toFixed(2)}
+            </option>
+          ))}
+        </select>
+
+        <div className="mb-4 text-sm">
+          <p>Items: {totalItems}</p>
+          <p>Subtotal: Ksh {subtotal.toFixed(2)}</p>
+          <p>Shipping: Ksh {shippingCost().toFixed(2)}</p>
+          <p className="font-bold text-lg">Total: Ksh {total.toFixed(2)}</p>
         </div>
 
-        <div className="border-t pt-4 mb-6 text-sm text-gray-700">
-          <h3 className="text-[#900000] font-semibold mb-2">Order Summary</h3>
-          <div className="flex justify-between mb-1">
-            <span>Items:</span>
-            <span>{totalItems}</span>
-          </div>
-          <div className="flex justify-between mb-1">
-            <span>Subtotal:</span>
-            <span>Ksh {subtotal.toFixed(2)}</span>
-          </div>
-          <div className="flex justify-between mb-1">
-            <span>Shipping:</span>
-            <span>Ksh {shippingCost().toFixed(2)}</span>
-          </div>
-          <div className="flex justify-between font-bold text-base">
-            <span>Total:</span>
-            <span>Ksh {total.toFixed(2)}</span>
-          </div>
-        </div>
-
-        <button onClick={() => onCompleteOrder && selectedLocation && onCompleteOrder({ cartItems, selectedLocation, total })}
-         disabled={!selectedLocation || cartItems.length === 0} className="w-full bg-[#900000] text-white font-semibold py-2 rounded-md hover:bg-red-700 transition mb-2">
+        <button
+          onClick={handleCompleteOrder}
+          disabled={!isFormValid}
+          className={`w-full py-2 mb-3 rounded text-white font-bold transition ${
+            isFormValid ? 'bg-[#6a5acd] hover:bg-[#836fff]' : 'bg-gray-400 cursor-not-allowed'
+          }`}
+        >
           Complete Order
         </button>
 
-        <button onClick={() => navigate("/")} className="w-full text-[#900000] py-2 rounded-md border border-[#800000] transition text-sm">
-          Cancel Order
+        <button
+          onClick={handleCancelOrder}
+          className="w-full py-2 text-[#6a5acd] border border-[#6a5acd] rounded font-semibold hover:bg-[#6a5acd] hover:text-white transition"
+        >
+          Cancel Order & Return Home
         </button>
       </div>
     </div>
