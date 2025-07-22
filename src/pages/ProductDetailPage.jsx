@@ -41,7 +41,7 @@ function ProductDetailPage() {
           to="/"
           className="inline-block mt-6 px-6 py-3 bg-gradient-to-r from-[#B026FF] to-[#00F0FF] rounded-full font-semibold hover:shadow-lg hover:shadow-[#00F0FF]/30 transition-all duration-300 transform hover:scale-105"
         >
-          ← Back to Rebel Radiance
+        Back to Rebel Radiance
         </Link>
       </div>
     );
@@ -49,7 +49,6 @@ function ProductDetailPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-purple-900 to-cyan-900 text-slate-100 py-12 px-6 relative overflow-hidden">
-      {/* Subtle Animated Background Glow */}
       <div
         className="absolute inset-0 pointer-events-none opacity-20"
         style={{
@@ -61,7 +60,6 @@ function ProductDetailPage() {
       ></div>
 
       <div className="relative z-10 max-w-6xl mx-auto">
-        {/* Back Button - On-Brand */}
         <div className="mb-8">
           <Link
             to="/"
@@ -71,10 +69,7 @@ function ProductDetailPage() {
             Back to Home
           </Link>
         </div>
-
-        {/* Product Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
-          {/* Image Gallery */}
           <div className="space-y-6">
             {product.images && product.images.length > 0 ? (
               product.images.map((img, index) => (
@@ -96,8 +91,6 @@ function ProductDetailPage() {
               </div>
             )}
           </div>
-
-          {/* Product Info */}
           <div className="flex flex-col gap-6">
             <h1
               className="text-4xl md:text-5xl font-black leading-tight"
@@ -114,8 +107,6 @@ function ProductDetailPage() {
             <p className="text-xl text-cyan-300 font-medium">{product.category?.name || 'Uncategorized'}</p>
 
             <p className="text-slate-300 leading-relaxed text-lg">{product.description}</p>
-
-            {/* Variants Section */}
             <div className="mt-10">
               <h3
                 className="text-2xl font-bold mb-5"

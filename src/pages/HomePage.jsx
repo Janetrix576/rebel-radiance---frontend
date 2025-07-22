@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 function HomePage() {
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden relative flex items-center justify-center">
-      {/* Animated Gradient Background */}
       <div
         className="absolute inset-0 opacity-70"
         style={{
@@ -17,8 +16,6 @@ function HomePage() {
           zIndex: 0,
         }}
       ></div>
-
-      {/* Grid Overlay (Subtle Futuristic Texture) */}
       <div
         className="absolute inset-0 z-10 pointer-events-none"
         style={{
@@ -30,10 +27,7 @@ function HomePage() {
           opacity: 0.3,
         }}
       ></div>
-
-      {/* Content */}
       <div className="relative z-20 text-center px-6 py-20 max-w-5xl mx-auto">
-        {/* Main Brand Name */}
         <h1
           className="text-7xl md:text-9xl font-black mb-6 leading-none tracking-wide"
           style={{
@@ -55,8 +49,6 @@ function HomePage() {
         >
           RADIANCE
         </h2>
-
-        {/* Tagline */}
         <p
           className="text-lg md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed text-white/90"
           style={{
@@ -67,7 +59,6 @@ function HomePage() {
           Step into the light. Own the night.
         </p>
 
-        {/* CTA Button with Neon Glow */}
         <Link
           to="/products"
           className="inline-block px-12 py-5 text-xl font-bold rounded-full 
@@ -76,7 +67,6 @@ function HomePage() {
                      transform hover:scale-105 transition-all duration-300
                      relative overflow-hidden group"
         >
-          {/* Glow Effect */}
           <span
             className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-30 blur-md transition-opacity duration-300"
             style={{
@@ -87,8 +77,6 @@ function HomePage() {
           🔥 Explore the Collection →
         </Link>
       </div>
-
-      {/* Floating Particles Animation (Optional Extra Flair) */}
       <div className="absolute inset-0 pointer-events-none">
         {[...Array(6)].map((_, i) => (
           <div

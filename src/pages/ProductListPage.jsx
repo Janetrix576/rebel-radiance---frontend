@@ -20,47 +20,67 @@ export default function ProductListPage() {
       try {
         setIsLoading(true);
         setError(null);
+
         const [productsData, categoriesData] = await Promise.all([
           api.fetchProducts(),
           api.fetchCategories(),
         ]);
-        setAllProducts(productsData);
-        setFilteredProducts(productsData);
-        setCategories([{ name: 'All', slug: 'all' }, ...categoriesData]);
-        console.log('Sample product category:', productsData[0]?.category);
+        const normalizedProducts = productsData.map((product) => {
+          const categorySlugs = [];
+
+          if (typeof product.category === 'string') {
+
+            categorySlugs.push(
+              ...product.category
+                .split(' > ')
+                .map(str => str.toLowerCase().trim())
+            );
+          } else if (typeof product.category === 'object' && product.category.slug) {
+            categorySlugs.push(product.category.slug.toLowerCase());
+          }
+
+          return {
+            ...product,
+            category_slugs: categorySlugs, 
+          };
+        });
+
+        setAllProducts(normalizedProducts);
+        setFilteredProducts(normalizedProducts);
+
+        const allOption = { name: 'All', slug: 'all' };
+        setCategories([allOption, ...categoriesData]);
       } catch (err) {
-        console.error('Error loading data:', err);
-        setError('Could not connect to the server. Please ensure the backend is running and refresh the page.');
+        console.error('Error loading ', err);
+        setError('Failed to load products. Check your backend.');
       } finally {
         setIsLoading(false);
       }
     };
+
     loadData();
   }, []);
-
   useEffect(() => {
     let products = [...allProducts];
 
     if (activeFilter !== 'all') {
-      products = products.filter((product) => {
-        const productCategorySlug = typeof product.category === 'object'
-          ? product.category?.slug
-          : product.category;
-        return productCategorySlug === activeFilter;
-      });
+      products = products.filter((product) =>
+        product.category_slugs.includes(activeFilter.toLowerCase())
+      );
     }
 
     if (searchTerm) {
+      const term = searchTerm.toLowerCase();
       products = products.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        product.name.toLowerCase().includes(term)
       );
     }
 
     setFilteredProducts(products);
   }, [activeFilter, searchTerm, allProducts]);
 
-  const handleFilterChange = (categorySlug) => {
-    setActiveFilter(categorySlug);
+  const handleFilterChange = (slug) => {
+    setActiveFilter(slug);
   };
 
   const handleSearch = (e) => {
@@ -120,6 +140,7 @@ export default function ProductListPage() {
             </p>
           </div>
         )}
+
         {error && (
           <div className="text-center py-16">
             <p className="text-red-300 mb-4">{error}</p>
@@ -132,11 +153,18 @@ export default function ProductListPage() {
           </div>
         )}
         {!isLoading && !error && (
-          <ProductGrid
-            products={filteredProducts}
-            onProductClick={(slug) => setSelectedProductSlug(slug)}
-          />
+          filteredProducts.length > 0 ? (
+            <ProductGrid
+              products={filteredProducts}
+              onProductClick={(slug) => setSelectedProductSlug(slug)}
+            />
+          ) : (
+            <p className="text-center py-10 text-slate-400">
+              {activeFilter === 'all' ? 'No products available.' : `No products in "${activeFilter}" category.`}
+            </p>
+          )
         )}
+
         <ProductModal
           productSlug={selectedProductSlug}
           onClose={() => setSelectedProductSlug(null)}

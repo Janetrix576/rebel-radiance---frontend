@@ -1,4 +1,3 @@
-// components/Navbar.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -10,7 +9,6 @@ function Navbar() {
           to="/"
           className="inline-flex items-center space-x-2 text-white font-bold text-xl group"
         >
-          {/* Logo / Brand Name with Glow */}
           <span
             className="text-2xl"
             style={{
@@ -24,8 +22,6 @@ function Navbar() {
           </span>
         </Link>
       </div>
-
-      {/* Optional Bottom Border Glow */}
       <div
         className="h-0.5 bg-gradient-to-r from-purple-600 via-cyan-400 to-transparent"
         style={{
