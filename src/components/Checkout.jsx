@@ -153,10 +153,42 @@ const Checkout = () => {
 
   const isFormValid = firstName && secondName && phone && selectedLocation;
 
-  const handleCompleteOrder = () => {
-    if (isFormValid) {
-      console.log("Order Submitted", { firstName, secondName, phone, cartItems, selectedLocation, total });
-      alert("Order submitted successfully!");
+  const handleCompleteOrder = async () => {
+    if (!isFormValid) return;
+
+    const orderData = {
+      first_name: firstName,
+      second_name: secondName,
+      phone: phone,
+      location: selectedLocation,
+      items: cartItems.map(item => ({
+        title: item.title,
+        quantity: item.quantity,
+        size: item.size || "Default",
+        price: item.price,
+      })),
+      total: total,
+    };
+
+    try {
+      const response = await fetch ("http://localhost:8000/api/orders/create/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert("Order submitted successfully!");
+        navigate("/");
+      } else {
+        alert("Failed to submit order. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting order:", error);
+      alert("Server error. Please check your backend.");
     }
   };
 
@@ -169,7 +201,7 @@ const Checkout = () => {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#3ed8ff] via-[#7c4dff] to-[#a864fd] text-white">
         <div className="text-center">
           <h2 className="text-xl font-bold mb-4">Your cart is empty</h2>
-          <button onClick={() => navigate("/")} className="px-4 py-2 bg-white text-[#7c4dff] font-semibold rounded">
+          <button onClick={handleCancelOrder} className="px-4 py-2 bg-white text-[#7c4dff] font-semibold rounded">
             Back to Home
           </button>
         </div>
@@ -183,34 +215,12 @@ const Checkout = () => {
         <h1 className="text-3xl font-bold text-center text-[#7c4dff] mb-6">Rebel Radiance Checkout</h1>
 
         <div className="grid gap-4 mb-4">
-          <input
-            className="p-2 border border-gray-300 rounded placeholder-gray-500"
-            type="text"
-            placeholder="First Name*"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-          <input
-            className="p-2 border border-gray-300 rounded placeholder-gray-500"
-            type="text"
-            placeholder="Second Name*"
-            value={secondName}
-            onChange={(e) => setSecondName(e.target.value)}
-          />
-          <input
-            className="p-2 border border-gray-300 rounded placeholder-gray-500"
-            type="text"
-            placeholder="Phone Number*"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
+          <input className="p-2 border border-gray-300 rounded" type="text" placeholder="First Name*" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+          <input className="p-2 border border-gray-300 rounded" type="text" placeholder="Second Name*" value={secondName} onChange={(e) => setSecondName(e.target.value)} />
+          <input className="p-2 border border-gray-300 rounded" type="text" placeholder="Phone Number*" value={phone} onChange={(e) => setPhone(e.target.value)} />
         </div>
 
-        <select
-          value={selectedLocation}
-          onChange={(e) => setSelectedLocation(e.target.value)}
-          className="w-full p-2 border border-gray-300 rounded mb-4"
-        >
+        <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)} className="w-full p-2 border border-gray-300 rounded mb-4">
           <option value="">-- Select a location --</option>
           {locations.map((loc, idx) => (
             <option key={idx} value={loc.name}>
@@ -226,20 +236,11 @@ const Checkout = () => {
           <p className="font-bold text-lg">Total: Ksh {total.toFixed(2)}</p>
         </div>
 
-        <button
-          onClick={handleCompleteOrder}
-          disabled={!isFormValid}
-          className={`w-full py-2 mb-3 rounded text-white font-bold transition ${
-            isFormValid ? 'bg-[#6a5acd] hover:bg-[#836fff]' : 'bg-gray-400 cursor-not-allowed'
-          }`}
-        >
+        <button onClick={handleCompleteOrder} disabled={!isFormValid} className={`w-full py-2 mb-3 rounded text-white font-bold transition ${isFormValid ? 'bg-[#6a5acd] hover:bg-[#836fff]' : 'bg-gray-400 cursor-not-allowed'}`}>
           Complete Order
         </button>
 
-        <button
-          onClick={handleCancelOrder}
-          className="w-full py-2 text-[#6a5acd] border border-[#6a5acd] rounded font-semibold hover:bg-[#6a5acd] hover:text-white transition"
-        >
+        <button onClick={handleCancelOrder} className="w-full py-2 text-[#6a5acd] border border-[#6a5acd] rounded font-semibold hover:bg-[#6a5acd] hover:text-white transition">
           Cancel Order & Return Home
         </button>
       </div>
