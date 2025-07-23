@@ -1,17 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+const colors = {
+  darkBg: '#111827',
+  primaryText: '#D1D5DB',
+  darkerPurple: '#6D28D9',
+  mutedCyan: '#0E7490',
+};
+
 function HomePage() {
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden ">
+    <div className={`min-h-screen bg-[${colors.darkBg}] text-[${colors.primaryText}] overflow-hidden`}>
       <div
-        className="absolute inset-0 opacity-70"
+        className="absolute inset-0 opacity-40"
         style={{
           background: `
-            radial-gradient(circle at 20% 30%, #B026FF 0%, transparent 50%),
-            radial-gradient(circle at 80% 70%, #00F0FF 0%, transparent 50%),
-            radial-gradient(circle at 50% 10%, #B026FF 0%, transparent 40%),
-            radial-gradient(circle at 90% 40%, #00F0FF 0%, transparent 40%)
+            radial-gradient(circle at 20% 30%, ${colors.darkerPurple} 0%, transparent 40%),
+            radial-gradient(circle at 80% 70%, ${colors.mutedCyan} 0%, transparent 40%)
           `,
           zIndex: 0,
         }}
@@ -20,21 +25,20 @@ function HomePage() {
         className="absolute inset-0 z-10 pointer-events-none"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(176, 38, 255, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px)
+            linear-gradient(rgba(109, 40, 217, 0.07) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(14, 116, 144, 0.07) 1px, transparent 1px)
           `,
           backgroundSize: '50px 50px',
-          opacity: 0.3,
+          opacity: 0.2,
         }}
       ></div>
       <div className="relative z-20 text-center px-6 py-20 max-w-5xl mx-auto">
         <h1
           className="text-7xl md:text-9xl font-black mb-6 leading-none tracking-wide"
           style={{
-            background: 'linear-gradient(90deg, #B026FF, #00F0FF)',
+            background: `linear-gradient(90deg, ${colors.darkerPurple}, ${colors.mutedCyan})`,
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            textShadow: '0 0 20px rgba(176, 38, 255, 0.5), 0 0 40px rgba(0, 240, 255, 0.4)',
           }}
         >
           REBEL
@@ -42,51 +46,37 @@ function HomePage() {
         <h2
           className="text-5xl md:text-7xl font-bold mb-8"
           style={{
-            background: 'linear-gradient(90deg, #FFFFFF, #B026FF)',
+            background: `linear-gradient(90deg, ${colors.primaryText}, ${colors.darkerPurple})`,
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
           }}
         >
           RADIANCE
         </h2>
-        <p
-          className="text-lg md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed text-white/90"
-          style={{
-            textShadow: '0 0 10px rgba(0, 240, 255, 0.3)',
-          }}
-        >
-          Where <span className="text-[#B026FF] font-semibold">fearless style</span> meets <span className="text-[#00F0FF] font-semibold">electric energy</span>.  
+        <p className="text-lg md:text-2xl mb-12 max-w-3xl mx-auto leading-relaxed">
+          Where <span className="font-semibold" style={{ color: colors.darkerPurple }}>fearless style</span> meets <span className="font-semibold" style={{ color: colors.mutedCyan }}>electric energy</span>.
           Step into the light. Own the night.
         </p>
-
         <Link
           to="/products"
-          className="inline-block px-12 py-5 text-xl font-bold rounded-full 
-                     bg-gradient-to-r from-[#B026FF] to-[#00F0FF] 
-                     text-white shadow-2xl hover:shadow-[#00F0FF]/50 
-                     transform hover:scale-105 transition-all duration-300
-                     relative overflow-hidden group"
+          className={`inline-block px-12 py-5 text-xl font-bold rounded-full 
+                     bg-gradient-to-r from-[${colors.darkerPurple}] to-[${colors.mutedCyan}] 
+                     text-white shadow-lg hover:shadow-xl
+                     transform hover:scale-105 transition-all duration-300`}
         >
-          <span
-            className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-30 blur-md transition-opacity duration-300"
-            style={{
-              background: 'radial-gradient(circle, #00F0FF, #B026FF)',
-              zIndex: -1,
-            }}
-          ></span>
-          🔥 Explore the Collection →
+          Explore the Collection →
         </Link>
       </div>
       <div className="absolute inset-0 pointer-events-none">
         {[...Array(6)].map((_, i) => (
           <div
             key={i}
-            className="absolute w-2 h-2 bg-cyan-400 rounded-full opacity-60 animate-ping"
+            className="absolute w-1.5 h-1.5 bg-cyan-800 rounded-full opacity-50 animate-ping"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
               animationDelay: `${Math.random() * 2}s`,
-              animationDuration: '3s',
+              animationDuration: '4s',
             }}
           ></div>
         ))}
