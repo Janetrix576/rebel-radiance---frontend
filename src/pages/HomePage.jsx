@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 function HomePage() {
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden relative flex items-center justify-center">
+    <div className="min-h-screen bg-black text-white overflow-hidden ">
       <div
         className="absolute inset-0 opacity-70"
         style={{
