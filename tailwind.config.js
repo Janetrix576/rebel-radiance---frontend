@@ -2,6 +2,7 @@
 export default {
   content: [
     "./index.html",
+
     "./src/**/*.{js,ts,jsx,tsx}", 
   ],
   theme: {
@@ -11,6 +12,12 @@ export default {
         'electric-blue': '#00BFFF',
         'turquoise': '#40E0D0',
       },
+
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+  theme: {
+    extend: {},
+
   },
   plugins: [],
 }
