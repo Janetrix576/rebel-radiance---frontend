@@ -67,7 +67,7 @@ const App = () => {
     <div className="min-h-screen bg-gray-100">
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-[var(--electric-purple)]">ElectroShop</h1>
+          <h1 className="text-2xl font-bold text-[var(--electric-purple)]">Rebel Radiance</h1>
           <button 
             onClick={() => setIsCartOpen(true)}
             className="relative p-2 text-gray-700 hover:text-[var(--electric-purple)]"
