@@ -1,3 +1,12 @@
+
+import CheckoutPage from "../pages/CheckoutPage";
+
+function App() {
+  return (
+    <div className="App">
+      <CheckoutPage />
+    </div>
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -24,6 +33,7 @@ function App() {
         </div>
       </div>
     </Router>
+
   );
 }
 
