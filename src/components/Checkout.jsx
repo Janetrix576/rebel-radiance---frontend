@@ -2,295 +2,82 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const locations = [
-
-  { name: "Nairobi", price: 350 },
-  { name: "Kisumu", price: 500 },
-  { name: "Mombasa", price: 640 },
-];
-
-const Checkout = ({ onCompleteOrder }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const cartItems = [
-    { title: 'Mkurugenzi T-Shirt', price: 1000, quantity: 1, size: 'L' },
-    { title: 'Merch Hoodie', price: 2500, quantity: 1, size: 'XL' },
-  ]; // hardcoded for now
-
-  const [selectedLocation, setSelectedLocation] = useState('');
-
-  const getShipping = () => {
-
-  { name: "Isebania", price: 740.0 },
-  { name: "Kehancha", price: 740.0 },
-  { name: "Garissa", price: 750.0 },
-  { name: "Kendubay", price: 750.0 },
-  { name: "Rachuonyo", price: 750.0 },
-  { name: "Diani", price: 770.0 },
-  { name: "Kapenguria", price: 780.0 },
-  { name: "Kilifi", price: 800.0 },
-  { name: "Wundanyi", price: 800.0 },
-  { name: "Malindi", price: 840.0 },
-  { name: "Mwatate", price: 840.0 },
-  { name: "Taveta", price: 850.0 },
-  { name: "Watamu", price: 850.0 },
-  { name: "Marasbit", price: 950.0 },
-  { name: "Maralal", price: 1100.0 },
-  { name: "Lamu", price: 2050.0 },
+  { name: "Nairobi", price: 350.0 }, { name: "Ngong", price: 350.0 }, { name: "Kikuyu", price: 350.0 },
+  { name: "Athi River", price: 360.0 }, { name: "Kitengela", price: 360.0 }, { name: "Nakuru", price: 360.0 },
+  { name: "Ruiru", price: 360.0 }, { name: "Thika", price: 360.0 }, { name: "Juja", price: 380.0 },
+  { name: "Karatina", price: 400.0 }, { name: "Kerugoya", price: 400.0 }, { name: "Nyeri", price: 420.0 },
+  { name: "Machakos", price: 420.0 }, { name: "Muranga", price: 420.0 }, { name: "Narok", price: 420.0 },
+  { name: "Eldoret", price: 450.0 }, { name: "Kitui", price: 450.0 }, { name: "Meru", price: 480.0 },
+  { name: "Kericho", price: 480.0 }, { name: "Kakamega", price: 480.0 }, { name: "Kisii", price: 500.0 },
+  { name: "Kisumu", price: 500.0 }, { name: "Kitale", price: 520.0 }, { name: "Nanyuki", price: 520.0 },
+  { name: "Bungoma", price: 600.0 }, { name: "Migori", price: 600.0 }, { name: "Voi", price: 600.0 },
+  { name: "Mombasa", price: 640.0 }, { name: "Isiolo", price: 650.0 }, { name: "Busia", price: 660.0 },
+  { name: "Homabay", price: 700.0 }, { name: "Malindi", price: 840.0 }, { name: "Lamu", price: 2050.0 },
   { name: "Lodwar", price: 2050.0 },
-  { name: "Lokichogio", price: 2850.0 },
-  { name: "Kiganjo", price: 410.0 },
-  { name: "Kutus", price: 410.0 },
-  { name: "Mukurweini", price: 410.0 },
-  { name: "Mwea", price: 410.0 },
-  { name: "Chuka", price: 420.0 },
-  { name: "Embu", price: 420.0 },
-  { name: "Isinya", price: 420.0 },
-  { name: "Kajiado", price: 420.0 },
-  { name: "Kangema", price: 420.0 },
-  { name: "Machakos", price: 420.0 },
-  { name: "Matuu", price: 420.0 },
-  { name: "Muranga", price: 420.0 },
-  { name: "Murarandia", price: 420.0 },
-  { name: "Narok", price: 420.0 },
-  { name: "Nyeri", price: 420.0 },
-  { name: "Orhaya", price: 420.0 },
-  { name: "Runyenjes", price: 420.0 },
-  { name: "Tala", price: 420.0 },
-  { name: "Eldoret", price: 450.0 },
-  { name: "Bungoma", price: 600.0 },
-  { name: "Chwele", price: 600.0 },
-  { name: "Keroka", price: 600.0 },
-  { name: "Kilgoris", price: 600.0 },
-  { name: "Kimilli", price: 600.0 },
-  { name: "Lugari", price: 600.0 },
-  { name: "Malaba", price: 600.0 },
-  { name: "Migori", price: 600.0 },
-  { name: "Mitto Andei", price: 600.0 },
-  { name: "Mumias", price: 600.0 },
-  { name: "Mwala", price: 600.0 },
-  { name: "Ogembo", price: 600.0 },
-  { name: "Oyugis", price: 600.0 },
-  { name: "Rongo", price: 600.0 },
-  { name: "Voi", price: 600.0 },
-  { name: "Webuye", price: 600.0 },
-  { name: "Wote", price: 600.0 },
-  { name: "Kapsabet", price: 620.0 },
-  { name: "Kikuyu", price: 350.0 },
-  { name: "Nairobi", price: 350.0 },
-  { name: "Ngong", price: 350.0 },
-  { name: "Tongata Rongai", price: 350.0 },
-  { name: "Athi River", price: 360.0 },
-  { name: "Kitengela", price: 360.0 },
-  { name: "Makuyu", price: 360.0 },
-  { name: "Nakuru", price: 360.0 },
-  { name: "Ruiru", price: 360.0 },
-  { name: "Sabasaba", price: 360.0 },
-  { name: "Thika", price: 360.0 },
-  { name: "Juja", price: 380.0 },
-  { name: "Engineer", price: 400.0 },
-  { name: "Kagio", price: 400.0 },
-  { name: "Kangundo", price: 400.0 },
-  { name: "Karatina", price: 400.0 },
-  { name: "Kerugoya", price: 400.0 },
-  { name: "Kitui", price: 450.0 },
-  { name: "Turbo", price: 450.0 },
-  { name: "Makutano", price: 460.0 },
-  { name: "Nkubu", price: 460.0 },
-  { name: "Eldama Ravine", price: 470.0 },
-  { name: "Chogoria", price: 480.0 },
-  { name: "Kakamega", price: 480.0 },
-  { name: "Kericho", price: 480.0 },
-  { name: "Mbale", price: 480.0 },
-  { name: "Meru", price: 480.0 },
-  { name: "Molo", price: 480.0 },
-  { name: "Njoro", price: 480.0 },
-  { name: "Nyahuuru", price: 480.0 },
-  { name: "Oikalau", price: 480.0 },
-  { name: "Sabatia", price: 480.0 },
-  { name: "Sagana", price: 480.0 },
-  { name: "Bomet", price: 500.0 },
-  { name: "Kisii", price: 500.0 },
-  { name: "Kisumu", price: 500.0 },
-  { name: "Litein", price: 500.0 },
-  { name: "Londiani", price: 500.0 },
-  { name: "Maseno", price: 500.0 },
-  { name: "Masii", price: 500.0 },
-  { name: "Nyamira", price: 500.0 },
-  { name: "Sotik", price: 500.0 },
-  { name: "Burnt Forest", price: 520.0 },
-  { name: "Kitale", price: 520.0 },
-  { name: "Nanyuki", price: 520.0 },
-  { name: "Naromoru", price: 520.0 },
-  { name: "Timau", price: 520.0 },
-  { name: "Moï's Bridge", price: 530.0 },
-  { name: "Mwingi", price: 550.0 },
-  { name: "Email", price: 580.0 },
-  { name: "Kabarnet", price: 580.0 },
-  { name: "Kibwezi", price: 580.0 },
-  { name: "Makindu", price: 580.0 },
-  { name: "Sultan Hamud", price: 580.0 },
-  { name: "Nandi Hills", price: 620.0 },
-  { name: "Ahero", price: 640.0 },
-  { name: "Bondo", price: 640.0 },
-  { name: "Mariakani", price: 640.0 },
-  { name: "Mombasa", price: 640.0 },
-  { name: "Mtwapa", price: 640.0 },
-  { name: "Isiolo", price: 650.0 },
-  { name: "Maua", price: 650.0 },
-  { name: "Siaya", price: 650.0 },
-  { name: "Ugunja", price: 650.0 },
-  { name: "Busia", price: 660.0 },
-  { name: "Luanda", price: 660.0 },
-  { name: "Muhoroni", price: 660.0 },
-  { name: "Nambale", price: 670.0 },
-  { name: "Oloitoktok", price: 670.0 },
-  { name: "Baraton", price: 700.0 },
-  { name: "Homabay", price: 700.0 },
-  { name: "Nzoia", price: 710.0 },
-  { name: "Mbita", price: 720.0 }
+
 ];
 
 const Checkout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const cartItems = location.state?.cartItems || [];
-
   const [selectedLocation, setSelectedLocation] = useState('');
   const [firstName, setFirstName] = useState('');
   const [secondName, setSecondName] = useState('');
   const [phone, setPhone] = useState('');
-
-  const shippingCost = () => {
-
-    const match = locations.find((loc) => loc.name === selectedLocation);
-    return match ? match.price : 0;
-  };
-
+  const shippingCost = locations.find((loc) => loc.name === selectedLocation)?.price || 0;
   const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-
-  const shipping = getShipping();
-  const total = subtotal + shipping;
-
-  const handleContinue = () => {
-    if (typeof onCompleteOrder === 'function') {
-      onCompleteOrder({ cartItems, selectedLocation, total });
-    }
-  };
-
-  return (
-    <div className="min-h-screen flex items-start justify-center bg-white py-12 px-4">
-      <div className="w-full sm:max-w-md bg-[#f7f7f7] mt-10 rounded-xl shadow-md p-6 font-sans">
-        <button onClick={() => navigate("/")} className="flex items-center text-primary hover:text-red-700 text-sm mb-4">
-          <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-          Back to Home
-        </button>
-
-        <h1 className="text-2xl font-bold text-center text-primary mb-6">Checkout</h1>
-
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold text-primary mb-2">Your Items</h2>
-          {cartItems.map((item, index) => (
-            <div key={index} className="mb-2 text-sm text-gray-800">
-              {item.title} × {item.quantity} ({item.size || "N/A"}) @ Ksh {item.price} ={" "}
-              <strong>Ksh {(item.price * item.quantity).toFixed(2)}</strong>
-            </div>
-          ))}
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-primary mb-1">Select Delivery Location:</label>
-          <select
-            value={selectedLocation}
-            onChange={(e) => setSelectedLocation(e.target.value)}
-            className="w-full border border-primary rounded-md p-2 text-primary"
-          >
-            <option value="">-- Select a location --</option>
-            {locations.map((loc, idx) => (
-              <option key={idx} value={loc.name}>
-                {loc.name} - Ksh {loc.price}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="border-t pt-4 mb-6 text-sm text-gray-700">
-          <h3 className="text-primary font-semibold mb-2">Order Summary</h3>
-          <div className="flex justify-between mb-1"><span>Items:</span><span>{totalItems}</span></div>
-          <div className="flex justify-between mb-1"><span>Subtotal:</span><span>Ksh {subtotal.toFixed(2)}</span></div>
-          <div className="flex justify-between mb-1"><span>Shipping:</span><span>Ksh {shipping.toFixed(2)}</span></div>
-          <div className="flex justify-between font-bold text-base"><span>Total:</span><span>Ksh {total.toFixed(2)}</span></div>
-        </div>
-
-        <button
-          onClick={handleContinue}
-          disabled={!selectedLocation}
-          className="w-full bg-primary text-white font-semibold py-2 rounded-md hover:bg-red-700 transition mb-2"
-        >
-          Continue to Payment
-        </button>
-
-        <button
-          onClick={() => navigate("/")}
-          className="w-full text-primary py-2 rounded-md border border-primary text-sm"
-        >
-          Cancel Order
-  const total = subtotal + shippingCost();
+  const total = subtotal + shippingCost;
 
   const isFormValid = firstName && secondName && phone && selectedLocation;
 
   const handleCompleteOrder = async () => {
-    if (!isFormValid) return;
+    if (!isFormValid) {
+      alert("Please fill in all required fields.");
+      return;
+    }
 
     const orderData = {
-      first_name: firstName,
-      second_name: secondName,
-      phone: phone,
-      location: selectedLocation,
+      customer_name: `${firstName} ${secondName}`,
+      customer_email: "customer@example.com",
+      phone_number: phone,
+      delivery_location: selectedLocation,
       items: cartItems.map(item => ({
-        title: item.title,
+        variant_id: item.variant_id, 
         quantity: item.quantity,
-        size: item.size || "Default",
         price: item.price,
       })),
-      total: total,
+      total_price: total,
     };
 
     try {
-      const response = await fetch ("http://localhost:8000/api/orders/create/", {
+      const response = await fetch("https://rebel-radiance-backend.onrender.com/api/orders/create/", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
       });
 
       if (response.ok) {
-        const data = await response.json();
         alert("Order submitted successfully!");
         navigate("/");
       } else {
-        alert("Failed to submit order. Please try again.");
+        const errorData = await response.json();
+        alert(`Failed to submit order: ${JSON.stringify(errorData)}`);
       }
     } catch (error) {
       console.error("Error submitting order:", error);
-      alert("Server error. Please check your backend.");
+      alert("A server error occurred. Please ensure your backend is running and try again.");
     }
-  };
-
-  const handleCancelOrder = () => {
-    navigate("/");
   };
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#3ed8ff] via-[#7c4dff] to-[#a864fd] text-white">
-        <div className="text-center">
-          <h2 className="text-xl font-bold mb-4">Your cart is empty</h2>
-          <button onClick={handleCancelOrder} className="px-4 py-2 bg-white text-[#7c4dff] font-semibold rounded">
-            Back to Home
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
+        <div className="text-center p-8 bg-white/10 backdrop-blur-md rounded-xl">
+          <h2 className="text-2xl font-bold mb-4">Your Cart is Empty</h2>
+          <button onClick={() => navigate("/")} className="px-6 py-2 bg-gradient-to-r from-[#B026FF] to-[#00F0FF] text-white font-semibold rounded-full">
+            Continue Shopping
           </button>
         </div>
       </div>
@@ -298,47 +85,55 @@ const Checkout = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#3ed8ff] via-[#7c4dff] to-[#a864fd] p-6">
-      <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-lg text-gray-800">
-        <h1 className="text-3xl font-bold text-center text-[#7c4dff] mb-6">Rebel Radiance Checkout</h1>
+    <div className="min-h-screen flex items-center justify-center bg-black p-4 sm:p-6">
+      <div className="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 w-full max-w-lg text-gray-800 font-sans">
+        <h1 className="text-4xl font-black text-center mb-6" style={{ background: 'linear-gradient(90deg, #B026FF, #00F0FF)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          Checkout
+        </h1>
 
-        <div className="grid gap-4 mb-4">
-          <input className="p-2 border border-gray-300 rounded" type="text" placeholder="First Name*" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-          <input className="p-2 border border-gray-300 rounded" type="text" placeholder="Second Name*" value={secondName} onChange={(e) => setSecondName(e.target.value)} />
-          <input className="p-2 border border-gray-300 rounded" type="text" placeholder="Phone Number*" value={phone} onChange={(e) => setPhone(e.target.value)} />
+        <div className="space-y-4 mb-6">
+          <input className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#7C3AED] focus:outline-none transition" type="text" placeholder="First Name*" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+          <input className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#7C3AED] focus:outline-none transition" type="text" placeholder="Second Name*" value={secondName} onChange={(e) => setSecondName(e.target.value)} />
+          <input className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#7C3AED] focus:outline-none transition" type="tel" placeholder="Phone Number*" value={phone} onChange={(e) => setPhone(e.target.value)} />
         </div>
 
-        <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)} className="w-full p-2 border border-gray-300 rounded mb-4">
-          <option value="">-- Select a location --</option>
-          {locations.map((loc, idx) => (
-            <option key={idx} value={loc.name}>
+        <select value={selectedLocation} onChange={(e) => setSelectedLocation(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg mb-6 focus:ring-2 focus:ring-[#7C3AED] focus:outline-none transition">
+          <option value="">-- Select Delivery Location --</option>
+          {locations.map((loc) => (
+            <option key={loc.name} value={loc.name}>
               {loc.name} - Ksh {loc.price.toFixed(2)}
             </option>
           ))}
         </select>
 
-        <div className="mb-4 text-sm">
-          <p>Items: {totalItems}</p>
-          <p>Subtotal: Ksh {subtotal.toFixed(2)}</p>
-          <p>Shipping: Ksh {shippingCost().toFixed(2)}</p>
-          <p className="font-bold text-lg">Total: Ksh {total.toFixed(2)}</p>
+        <div className="border-t border-gray-200 pt-4 mb-6 space-y-2 text-gray-600">
+          <h3 className="text-xl font-bold text-gray-800 mb-3">Order Summary</h3>
+          {cartItems.map((item, index) => (
+            <div key={index} className="flex justify-between text-sm">
+              <span>{item.title} (x{item.quantity})</span>
+              <span>Ksh {(item.price * item.quantity).toFixed(2)}</span>
+            </div>
+          ))}
+          <div className="flex justify-between border-t pt-2 mt-2">
+            <span>Subtotal:</span>
+            <span>Ksh {subtotal.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Shipping:</span>
+            <span>Ksh {shippingCost.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between font-bold text-lg text-gray-900 border-t pt-2 mt-2">
+            <span>Total:</span>
+            <span>Ksh {total.toFixed(2)}</span>
+          </div>
         </div>
 
-        <button onClick={handleCompleteOrder} disabled={!isFormValid} className={`w-full py-2 mb-3 rounded text-white font-bold transition ${isFormValid ? 'bg-[#6a5acd] hover:bg-[#836fff]' : 'bg-gray-400 cursor-not-allowed'}`}>
+        <button onClick={handleCompleteOrder} disabled={!isFormValid} className={`w-full py-3 rounded-lg text-white font-bold text-lg transition-all duration-300 ${isFormValid ? 'bg-gradient-to-r from-[#B026FF] to-[#00F0FF] hover:scale-105' : 'bg-gray-400 cursor-not-allowed'}`}>
           Complete Order
-        </button>
-
-        <button onClick={handleCancelOrder} className="w-full py-2 text-[#6a5acd] border border-[#6a5acd] rounded font-semibold hover:bg-[#6a5acd] hover:text-white transition">
-          Cancel Order & Return Home
         </button>
       </div>
     </div>
   );
 };
 
-
 export default Checkout;
-
-export default Checkout;
- 
-

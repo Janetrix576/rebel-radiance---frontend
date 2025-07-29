@@ -8,7 +8,7 @@ const ProductList = () => {
 
   useEffect(() => {
     axios
-      .get('http://127.0.0.1:8000/api/products/items/')
+      .get('https://rebel-radiance-backend.onrender.com/api/products/items/')
       .then((res) => {
         setProducts(res.data);
         setLoading(false);
