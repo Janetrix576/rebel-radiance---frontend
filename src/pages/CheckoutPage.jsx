@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Checkout from '../components/Checkout';
+import Checkout from '../components/Checkout.jsx';
 import { Helmet } from 'react-helmet';
 import { closePaymentModal } from 'flutterwave-react-v3';
 

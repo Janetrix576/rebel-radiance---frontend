@@ -1,49 +1,52 @@
 import React from 'react';
+import { useCart } from '../context/CartContext';
 
-const CartItem = ({ item, removeFromCart, updateQuantity }) => {
+const CartItem = ({ item }) => {
+  console.log('CartItem is rendering with this item prop:', item);
+  const { removeFromCart, updateQuantity } = useCart();
+  const price = typeof item.price === 'number' ? item.price : 0;
+  const itemTotal = price * (item.quantity || 1);
+
   return (
-    <div className="flex items-center justify-between py-4 border-b border-gray-200">
-      <div className="flex items-center">
-        <img 
-          src={item.image} 
-          alt={item.name} 
-          className="w-16 h-16 object-cover rounded mr-4"
+    <li className="py-6 flex">
+      <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+        <img
+          src={item.image || 'https://via.placeholder.com/100'}
+          alt={item.name}
+          className="w-full h-full object-center object-cover"
         />
+      </div>
+
+      <div className="ml-4 flex-1 flex flex-col">
         <div>
-          <h3 className="font-medium">{item.name}</h3>
-          <p className="text-gray-600">${item.price.toFixed(2)}</p>
+          <div className="flex justify-between text-base font-medium text-gray-900">
+            <h3>{item.name || 'Product Name'}</h3>
+            <p className="ml-4">Ksh {itemTotal.toFixed(2)}</p>
+          </div>
+          <div className="mt-1 text-sm text-gray-500">
+            {item.variantDescription && <p>{item.variantDescription}</p>}
+            <p>Ksh {price.toFixed(2)} each</p>
+          </div>
+        </div>
+
+        <div className="flex-1 flex items-end justify-between text-sm">
+          <div className="flex items-center border border-gray-300 rounded">
+            <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="px-2 py-1 text-gray-600 hover:bg-gray-100">-</button>
+            <span className="px-3 text-gray-700">{item.quantity}</span>
+            <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-2 py-1 text-gray-600 hover:bg-gray-100">+</button>
+          </div>
+          <div className="flex">
+            <button
+              onClick={() => removeFromCart(item.id)}
+              type="button"
+              className="font-medium text-indigo-600 hover:text-indigo-500"
+            >
+              Remove
+            </button>
+          </div>
         </div>
       </div>
-      <div className="flex items-center">
-        <div className="flex items-center border border-gray-300 rounded mr-4">
-          <button
-            onClick={() => updateQuantity(item.id, item.quantity - 1)}
-            className="px-2 py-1 text-gray-600 hover:bg-gray-100"
-            disabled={item.quantity <= 1}
-          >
-            -
-          </button>
-          <span className="px-2">{item.quantity}</span>
-          <button
-            onClick={() => updateQuantity(item.id, item.quantity + 1)}
-            className="px-2 py-1 text-gray-600 hover:bg-gray-100"
-          >
-            +
-          </button>
-        </div>
-        <p className="w-20 text-right font-medium">
-          ${(item.price * item.quantity).toFixed(2)}
-        </p>
-        <button
-          onClick={() => removeFromCart(item.id)}
-          className="ml-4 text-red-500 hover:text-red-700"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
-        </button>
-      </div>
-    </div>
+    </li>
   );
 };
 
