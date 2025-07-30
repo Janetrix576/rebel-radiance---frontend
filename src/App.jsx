@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { CartProvider } from './context/CartContext';
 import Checkout from "./components/Checkout.jsx";
+import OrderHistoryPage from './pages/OrderHistoryPage';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Cart from './components/Cart';
@@ -24,6 +25,7 @@ function App() {
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/products" element={<ProductListPage />} />
+              <Route path="/my-orders" element={<OrderHistoryPage />} />
               <Route path="/products/:slug" element={<ProductDetailPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/account" element={<Account />} />

@@ -1,75 +1,78 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import CartItem from './CartItem';
+import { Link } from 'react-router-dom';
 
-const Cart = () => {
-  const navigate = useNavigate();
-  const { cartItems, isCartOpen, setIsCartOpen } = useCart();
-  const total = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-  const handleCheckout = () => {
-    setIsCartOpen(false);
-    navigate('/checkout');
-  };
-
-  if (!isCartOpen) {
-    return null;
-  }
+function Cart() {
+  const { isCartOpen, toggleCart, cartItems, cartTotal, updateQuantity, removeFromCart } = useCart();
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden" role="dialog" aria-modal="true">
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setIsCartOpen(false)}></div>
-        <section className="absolute inset-y-0 right-0 pl-10 max-w-full flex">
-          <div className="w-screen max-w-md">
-            <div className="h-full flex flex-col bg-white shadow-xl">
-              <div className="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
-                <div className="flex items-start justify-between">
-                  <h2 className="text-lg font-medium text-gray-900">Shopping cart</h2>
-                  <div className="ml-3 h-7 flex items-center">
-                    <button type="button" className="-m-2 p-2 text-gray-400 hover:text-gray-500" onClick={() => setIsCartOpen(false)}>
-                      <span className="sr-only">Close panel</span>
-                      <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-                <div className="mt-8">
-                  <div className="flow-root">
-                    {cartItems.length === 0 ? (
-                      <p className="text-center text-gray-500">Your cart is empty.</p>
-                    ) : (
-                      <ul className="-my-6 divide-y divide-gray-200">
-                        {cartItems.map(item => (<CartItem key={item.id} item={item} />))}
-                      </ul>
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div className="border-t border-gray-200 py-6 px-4 sm:px-6">
-                <div className="flex justify-between text-base font-medium text-gray-900">
-                  <p>Subtotal</p>
-                  <p>Ksh {total.toFixed(2)}</p>
-                </div>
-                <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
-                <div className="mt-6">
-                  <button
-                    onClick={handleCheckout}
-                    disabled={cartItems.length === 0}
-                    className="w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-400"
-                  >
-                    Checkout
-                  </button>
-                </div>
-              </div>
-            </div>
+    <>
+      <div
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-40 transition-opacity duration-300 ${isCartOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        onClick={toggleCart}
+      />
+      <div
+        className={`fixed top-0 right-0 h-full w-full max-w-sm bg-white shadow-2xl z-50 transform transition-transform duration-300 ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}
+      >
+        <div className="flex flex-col h-full text-gray-800">
+          <div className="flex justify-between items-center p-4 border-b border-gray-200">
+            <h2 className="text-xl font-bold">Shopping Cart</h2>
+            <button onClick={toggleCart} className="text-gray-500 hover:text-gray-800 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
-        </section>
+
+          <div className="flex-grow overflow-y-auto p-4">
+            {cartItems.length === 0 ? (
+              <p className="text-center text-gray-500 mt-8">Your cart is empty.</p>
+            ) : (
+              <div className="space-y-4">
+                {cartItems.map(item => (
+                  <div key={item.id} className="flex items-center space-x-4">
+                    <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-md" />
+                    <div className="flex-grow">
+                      <p className="font-semibold text-gray-900">{item.name}</p>
+                      <p className="text-sm text-gray-600">Ksh {(typeof item.price === 'number' ? item.price.toFixed(2) : '0.00')}</p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                       <input
+                         type="number"
+                         min="1"
+                         value={item.quantity}
+                         onChange={(e) => updateQuantity(item.id, parseInt(e.target.value, 10))}
+                         className="w-14 text-center border rounded bg-gray-100 border-gray-300 text-gray-800 focus:ring-blue-500 focus:border-blue-500"
+                       />
+                       <button onClick={() => removeFromCart(item.id)} className="text-gray-500 hover:text-red-600 transition-colors p-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                       </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {cartItems.length > 0 && (
+            <div className="p-4 border-t border-gray-200 bg-gray-50">
+              <div className="flex justify-between font-bold text-lg mb-4">
+                <span className="text-gray-600">Subtotal</span>
+                <span className="text-gray-900">Ksh {cartTotal.toFixed(2)}</span>
+              </div>
+              <Link
+                to="/checkout"
+                onClick={toggleCart}
+                className="w-full bg-blue-600 text-white text-center py-3 rounded-lg font-bold hover:bg-blue-700 transition-colors block"
+              >
+                Proceed to Checkout
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
-};
+}
 
 export default Cart;
