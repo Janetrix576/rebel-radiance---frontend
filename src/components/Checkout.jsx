@@ -5,7 +5,7 @@ import { useCart } from '../context/CartContext';
 import { closePaymentModal } from 'flutterwave-react-v3';
 
 const locations = [
-  { name: "Nairobi", price: 350.0 }, { name: "Ngong", price: 350.0 }, { name: "Kikuyu", price: 350.0 },
+  { name: "Nairobi", price: 1.0 }, { name: "Ngong", price: 350.0 }, { name: "Kikuyu", price: 350.0 },
   { name: "Athi River", price: 360.0 }, { name: "Kitengela", price: 360.0 }, { name: "Nakuru", price: 360.0 },
   { name: "Ruiru", price: 360.0 }, { name: "Thika", price: 360.0 }, { name: "Juja", price: 380.0 },
   { name: "Karatina", price: 400.0 }, { name: "Kerugoya", price: 400.0 }, { name: "Nyeri", price: 420.0 },
