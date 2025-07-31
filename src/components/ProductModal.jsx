@@ -92,7 +92,7 @@ export default function ProductModal({ productSlug, onClose }) {
               <>
                 <div className="w-full md:w-1/2 h-64 md:h-auto bg-dark-bg">
                   <img
-                    src={details.images?.[0]?.image || 'https://placehold.co/600x800/0D0C1D/B026FF?text=REBEL'}
+                    src={details.images?.[0]?.image || ' https://placehold.co/600x800/0D0C1D/B026FF?text=REBEL'}
                     alt={details.name}
                     className="w-full h-full object-cover"
                   />
