@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
-import  api  from '../api';
+import api from '../api';
 
-const LandingPage = () => {
+export default function LandingPage() {
   const [formType, setFormType] = useState('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,7 +13,7 @@ const LandingPage = () => {
 
   const handleAuth = async (e) => {
     e.preventDefault();
-    const endpoint = formType === 'login' ? 'auth/login/' : 'auth/register/';
+    const endpoint = formType === 'login' ? '/api/auth/login/' : '/api/auth/register/';
     const payload = formType === 'login' ? { email, password } : { email, username, password };
 
     try {
@@ -36,15 +36,16 @@ const LandingPage = () => {
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {
       try {
-        const response = await api.post('auth/google/', { code: codeResponse.code });
+        const response = await api.post('/api/auth/google/', { code: codeResponse.code });
         localStorage.setItem('accessToken', response.data.access);
         localStorage.setItem('refreshToken', response.data.refresh);
         api.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
         navigate('/products');
       } catch (error) {
-        setMessage('Google login failed.');
+        setMessage('Google login failed. Please try again.');
       }
     },
+    onError: () => setMessage('Google login cancelled or failed.'),
     flow: 'auth-code',
   });
 
@@ -55,10 +56,35 @@ const LandingPage = () => {
         {message && <p className="text-center text-red-400 mb-4">{message}</p>}
         <form onSubmit={handleAuth} className="space-y-4">
           <h2 className="text-2xl font-semibold text-center text-electric-blue mb-4">{formType === 'login' ? 'Login' : 'Register'}</h2>
-          {formType === 'register' && <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full p-3 bg-dark-bg border border-light-gray/20 rounded mt-1 text-white" required />}
-          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-3 bg-dark-bg border border-light-gray/20 rounded mt-1 text-white" required />
-          <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-3 bg-dark-bg border border-light-gray/20 rounded mt-1 text-white" required />
-          <button type="submit" className="w-full bg-gradient-to-r from-electric-purple to-electric-blue text-white p-3 rounded hover:opacity-90 font-bold">{formType === 'login' ? 'Login' : 'Register'}</button>
+          {formType === 'register' && (
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full p-3 bg-dark-bg border border-light-gray/20 rounded mt-1 text-white"
+              required
+            />
+          )}
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-3 bg-dark-bg border border-light-gray/20 rounded mt-1 text-white"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-3 bg-dark-bg border border-light-gray/20 rounded mt-1 text-white"
+            required
+          />
+          <button type="submit" className="w-full bg-gradient-to-r from-electric-purple to-electric-blue text-white p-3 rounded hover:opacity-90 font-bold">
+            {formType === 'login' ? 'Login' : 'Register'}
+          </button>
         </form>
         <div className="text-center my-4">
           <button onClick={() => setFormType(formType === 'login' ? 'register' : 'login')} className="text-electric-blue hover:underline">
@@ -69,10 +95,10 @@ const LandingPage = () => {
           <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-light-gray/30"></span></div>
           <div className="relative flex justify-center text-sm"><span className="bg-dark-gray px-2 text-light-gray">OR</span></div>
         </div>
-        <button onClick={() => handleGoogleLogin()} className="w-full bg-red-600 text-white p-3 rounded hover:bg-red-700 flex items-center justify-center">Login with Google</button>
+        <button onClick={handleGoogleLogin} className="w-full bg-red-600 text-white p-3 rounded hover:bg-red-700 flex items-center justify-center">
+          Login with Google
+        </button>
       </div>
     </div>
   );
-};
-
-export default LandingPage;
+}

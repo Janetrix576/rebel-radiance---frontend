@@ -46,7 +46,15 @@ export default function ProductListPage() {
   const filteredProducts = products
     .filter((p) => {
       if (activeFilter === 'all') return true;
-      return p.category?.slug === activeFilter || p.category?.parent?.slug === activeFilter;
+      const category = p.category;
+      if (!category) return false;
+      const parts = category.split(' > ');
+      const mainCategory = parts[0]?.toLowerCase();
+      const subCategory = parts[1]?.toLowerCase();
+      return (
+        mainCategory === activeFilter.toLowerCase() ||
+        subCategory === activeFilter.toLowerCase()
+      );
     })
     .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
 

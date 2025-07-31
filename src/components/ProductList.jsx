@@ -9,10 +9,8 @@ const ProductList = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await api.get('/products/');
+        const response = await api.get('/products/items');
         setProducts(response.data);
-
-        // Extract unique subcategories from the API response
         const uniqueSubcategories = ['All', ...new Set(
           response.data.map(product => product.category.split(' > ')[1])
         )];
@@ -24,8 +22,6 @@ const ProductList = () => {
     };
     fetchProducts();
   }, []);
-
-  // Filter products based on the selected category
   const filteredProducts = selectedCategory === 'All'
     ? products
     : products.filter(product =>
