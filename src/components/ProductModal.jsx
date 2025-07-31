@@ -13,17 +13,27 @@ export default function ProductModal({ productSlug, onClose }) {
 
   useEffect(() => {
     const loadDetails = async () => {
-      if (!productSlug) return;
+      if (!productSlug) {
+        setError('Invalid product slug.');
+        setIsLoading(false);
+        return;
+      }
       setIsLoading(true);
       setError(null);
       try {
-        const res = await api.get(`/items/${productSlug}`);
+        const res = await api.get(`products/items/${productSlug}`);
         setDetails(res.data);
         if (res.data.variants?.length > 0) {
           setSelectedVariant(res.data.variants[0]);
         }
       } catch (err) {
-        setError('Could not load product details.');
+        let errorMessage = 'Could not load product details.';
+        if (err.response?.status === 404) {
+          errorMessage = 'Product not found.';
+        } else if (err.response?.status) {
+          errorMessage += ` (Status: ${err.response.status})`;
+        }
+        setError(errorMessage);
       } finally {
         setIsLoading(false);
       }
@@ -68,8 +78,16 @@ export default function ProductModal({ productSlug, onClose }) {
             className="bg-dark-gray rounded-lg w-full max-w-4xl max-h-[90vh] flex flex-col md:flex-row overflow-hidden border-2 border-electric-purple/30"
             onClick={e => e.stopPropagation()}
           >
-            {isLoading && <div className="w-full p-12 text-center text-electric-blue text-xl font-semibold">Loading Radiance...</div>}
-            {error && <div className="w-full p-12 text-center text-red-500 text-xl font-semibold">{error}</div>}
+            {isLoading && (
+              <div className="w-full p-12 text-center text-electric-blue text-xl font-semibold">
+                Loading Radiance...
+              </div>
+            )}
+            {error && (
+              <div className="w-full p-12 text-center text-red-500 text-xl font-semibold">
+                {error}
+              </div>
+            )}
             {details && (
               <>
                 <div className="w-full md:w-1/2 h-64 md:h-auto bg-dark-bg">
@@ -80,7 +98,9 @@ export default function ProductModal({ productSlug, onClose }) {
                   />
                 </div>
                 <div className="w-full md:w-1/2 p-8 flex flex-col overflow-y-auto">
-                  <h2 className="text-3xl font-bold bg-gradient-to-r from-electric-purple to-electric-blue bg-clip-text text-transparent">{details.name}</h2>
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-electric-purple to-electric-blue bg-clip-text text-transparent">
+                    {details.name}
+                  </h2>
                   <p className="mt-2 text-2xl font-semibold text-electric-blue">
                     Ksh {selectedVariant ? parseFloat(selectedVariant.price).toFixed(2) : parseFloat(details.price).toFixed(2)}
                   </p>

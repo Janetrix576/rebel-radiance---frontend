@@ -19,13 +19,20 @@ export default function ProductListPage() {
       setIsLoading(true);
       setError(null);
       try {
-        const productsRes = await api.get('/items');
-        const categoriesRes = await api.get('/categories/');
+        const productsRes = await api.get('/products/items');
+        const categoriesRes = await api.get('/products/categories');
 
-        const productData = Array.isArray(productsRes.data) ? productsRes.data : productsRes.data.results || [];
-        const categoryData = Array.isArray(categoriesRes.data) ? categoriesRes.data : categoriesRes.data.results || [];
+        const productData = Array.isArray(productsRes.data)
+          ? productsRes.data
+          : productsRes.data.results || [];
 
-        setProducts(productData);
+        const categoryData = Array.isArray(categoriesRes.data)
+          ? categoriesRes.data
+          : categoriesRes.data.results || [];
+
+        const validProducts = productData.filter(p => p.category);
+
+        setProducts(validProducts);
         setCategories([{ name: 'All', slug: 'all' }, ...categoryData]);
       } catch (err) {
         setError('Failed to load products.');
@@ -37,11 +44,11 @@ export default function ProductListPage() {
   }, []);
 
   const filteredProducts = products
-    .filter(p => {
+    .filter((p) => {
       if (activeFilter === 'all') return true;
       return p.category?.slug === activeFilter || p.category?.parent?.slug === activeFilter;
     })
-    .filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    .filter((p) => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <div className="min-h-screen text-white relative overflow-hidden">

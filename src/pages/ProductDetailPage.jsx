@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import  api  from '../api';
+import api from '../api';
+import ProductList from '../components/ProductList';
 
 function ProductDetailPage() {
   const [product, setProduct] = useState(null);
@@ -15,6 +16,7 @@ function ProductDetailPage() {
         setProduct(response);
       } catch (error) {
         console.error("Failed to fetch product details:", error);
+        setProduct(null);
       } finally {
         setLoading(false);
       }
@@ -41,7 +43,7 @@ function ProductDetailPage() {
           to="/"
           className="inline-block mt-6 px-6 py-3 bg-gradient-to-r from-[#B026FF] to-[#00F0FF] rounded-full font-semibold hover:shadow-lg hover:shadow-[#00F0FF]/30 transition-all duration-300 transform hover:scale-105"
         >
-        Back to Rebel Radiance
+          Back to Rebel Radiance
         </Link>
       </div>
     );

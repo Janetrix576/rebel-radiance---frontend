@@ -1,17 +1,19 @@
+import React from 'react';
+
 export default function FilterBar({ categories, activeFilter, onFilterChange }) {
   return (
     <div className="flex flex-wrap gap-2">
-      {categories.map(cat => (
+      {categories.map((category) => (
         <button
-          key={cat.slug}
-          onClick={() => onFilterChange(cat.slug)}
-          className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-            activeFilter === cat.slug
-              ? 'bg-electric-blue text-dark-bg'
-              : 'bg-dark-bg text-light-gray hover:bg-electric-purple/20'
+          key={category.slug}
+          onClick={() => onFilterChange(category.slug)}
+          className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+            activeFilter === category.slug
+              ? 'bg-electric-purple text-white shadow-lg'
+              : 'text-slate-300 hover:bg-white/10 hover:text-white'
           }`}
         >
-          {cat.name}
+          {category.name}
         </button>
       ))}
     </div>
