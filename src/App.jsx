@@ -11,7 +11,6 @@ import LandingPage from './pages/LandingPage';
 import ProductListPage from './pages/ProductListPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CheckoutPage from './pages/CheckoutPage';
-import OrderHistoryPage from './pages/OrderHistoryPage';
 import HomePage from './pages/HomePage';
 
 const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -28,7 +27,6 @@ function App() {
               <Route path="/login" element={<LandingPage />} />
               <Route path="/products" element={<ProductListPage />} />
               <Route path="/products/:slug" element={<ProductDetailPage />} />
-              <Route path="/my-orders" element={<OrderHistoryPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
@@ -39,9 +37,9 @@ function App() {
             position="bottom-center"
             toastOptions={{
               style: {
-                background: '#1F2937', // dark-gray
-                color: '#F9FAFB', // off-white
-                border: '1px solid #B026FF', // electric-purple
+                background: '#1F2937', 
+                color: '#F9FAFB', 
+                border: '1px solid #B026FF',
               },
             }}
           />
