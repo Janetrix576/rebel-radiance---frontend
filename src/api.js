@@ -1,19 +1,19 @@
-const API_BASE_URL = 'https://rebel-radiance-backend.onrender.com';
+import axios from 'axios';
+const api = axios.create({
+  baseURL: 'https://rebel-radiance-backend.onrender.com/api/',
+});
 
-export const api = {
-  fetchProducts: async () => {
-    const response = await fetch(`${API_BASE_URL}/api/products/items/`);
-    if (!response.ok) throw new Error('Failed to fetch products');
-    return response.json();
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
   },
-  fetchProductDetails: async (slug) => {
-    const response = await fetch(`${API_BASE_URL}/api/products/items/${slug}/`);
-    if (!response.ok) throw new Error('Failed to fetch product details');
-    return response.json();
-  },
-  fetchCategories: async () => {
-    const response = await fetch(`${API_BASE_URL}/api/products/categories/`);
-    if (!response.ok) throw new Error('Failed to fetch categories');
-    return response.json();
-  },
-};
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export default api;

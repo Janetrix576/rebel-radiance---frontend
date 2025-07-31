@@ -7,10 +7,10 @@ export default function FilterBar({ categories, activeFilter, onFilterChange }) 
         <button
           key={category.slug}
           onClick={() => onFilterChange(category.slug)}
-          className={`px-4 py-2 rounded-md font-medium text-sm transition ${
-            activeFilter === category.slug
-              ? 'bg-white text-purple-700'
-              : 'bg-purple-200 text-white hover:bg-white hover:text-purple-700'
+          className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors duration-200 ${
+            activeFilter.toLowerCase() === category.slug.toLowerCase()
+              ? 'bg-electric-blue text-dark-bg'
+              : 'bg-dark-gray text-white hover:bg-electric-purple/50'
           }`}
         >
           {category.name}

@@ -1,68 +1,90 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 
 const CartContext = createContext();
 
-export const useCart = () => useContext(CartContext);
+export const useCart = () => {
+  return useContext(CartContext);
+};
 
 export const CartProvider = ({ children }) => {
-    const [cartItems, setCartItems] = useState([]);
-    const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [cartItems, setCartItems] = useState(() => JSON.parse(localStorage.getItem('cartItems')) || []);
+  const [favorites, setFavorites] = useState(() => JSON.parse(localStorage.getItem('favorites')) || []);
 
-    const addToCart = (product) => {
-        setCartItems(prevItems => {
-            const itemExists = prevItems.find(item => item.id === product.id);
-            if (itemExists) {
-                return prevItems.map(item =>
-                    item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-                );
-            }
-            return [...prevItems, { ...product, quantity: 1 }];
-        });
-    };
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
 
-    const removeFromCart = (productId) => {
-        setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
-    };
+  useEffect(() => {
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+  }, [favorites]);
 
-    const updateQuantity = (productId, newQuantity) => {
-        if (newQuantity <= 0) {
-            removeFromCart(productId);
-        } else {
-            setCartItems(prevItems =>
-                prevItems.map(item =>
-                    item.id === productId ? { ...item, quantity: newQuantity } : item
-                )
-            );
-        }
-    };
+  const toggleCart = () => setIsCartOpen(!isCartOpen);
 
-    const clearCart = () => {
-        setCartItems([]);
-    };
+  const addToCart = (product) => {
+    setCartItems(prevItems => {
+      const existingItem = prevItems.find(item => item.id === product.id);
+      if (existingItem) {
+        return prevItems.map(item =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      }
+      return [...prevItems, { ...product, quantity: 1 }];
+    });
+    toast.success(`${product.name} added to cart!`);
+  };
 
-    const toggleCart = () => {
-        setIsCartOpen(prev => !prev);
-    };
+  const removeFromCart = (productId) => {
+    setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
+  };
 
-    const cartCount = cartItems.reduce((count, item) => count + (item.quantity || 0), 0);
-    
-    const cartTotal = cartItems.reduce((total, item) => {
-        const itemPrice = typeof item.price === 'number' ? item.price : 0;
-        const itemQuantity = typeof item.quantity === 'number' ? item.quantity : 0;
-        return total + (itemPrice * itemQuantity);
-    }, 0);
+  const updateQuantity = (productId, quantity) => {
+    if (quantity < 1) {
+      removeFromCart(productId);
+      return;
+    }
+    setCartItems(prevItems =>
+      prevItems.map(item =>
+        item.id === productId ? { ...item, quantity } : item
+      )
+    );
+  };
 
-    const value = {
-        cartItems,
-        isCartOpen,
-        addToCart,
-        removeFromCart,
-        updateQuantity,
-        clearCart,
-        toggleCart,
-        cartCount,
-        cartTotal
-    };
+  const clearCart = () => setCartItems([]);
 
-    return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  const toggleFavorite = (product) => {
+    setFavorites(prev => {
+      const isFavorite = prev.some(fav => fav.id === product.id);
+      if (isFavorite) {
+        toast.error(`${product.name} removed from favorites.`);
+        return prev.filter(fav => fav.id !== product.id);
+      } else {
+        toast.success(`${product.name} added to favorites!`);
+        return [...prev, product];
+      }
+    });
+  };
+
+  const isFavorite = (productId) => favorites.some(fav => fav.id === productId);
+
+  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const cartTotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  const value = {
+    isCartOpen,
+    toggleCart,
+    cartItems,
+    cartTotal,
+    cartCount,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    favorites,
+    toggleFavorite,
+    isFavorite
+  };
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
