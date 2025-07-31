@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import  api  from '../api';
+import api from '../api';
 import ProductGrid from '../components/ProductGrid';
 import ProductModal from '../components/ProductModal';
 import FilterBar from '../components/FilterBar';
@@ -19,18 +19,16 @@ export default function ProductListPage() {
       setIsLoading(true);
       setError(null);
       try {
-        const productsResponse = await api.get('products/');
-        const categoriesResponse = await api.get('products/categories/');
-        
-        const productResults = productsResponse.data.results || productsResponse.data || [];
-        const categoryResults = categoriesResponse.data.results || categoriesResponse.data || [];
-        
-        setProducts(Array.isArray(productResults) ? productResults : []);
-        setCategories([{ name: 'All', slug: 'all' }, ...(Array.isArray(categoryResults) ? categoryResults : [])]);
-        
+        const productsRes = await api.get('/items');
+        const categoriesRes = await api.get('/categories/');
+
+        const productData = Array.isArray(productsRes.data) ? productsRes.data : productsRes.data.results || [];
+        const categoryData = Array.isArray(categoriesRes.data) ? categoriesRes.data : categoriesRes.data.results || [];
+
+        setProducts(productData);
+        setCategories([{ name: 'All', slug: 'all' }, ...categoryData]);
       } catch (err) {
-        console.error("Failed to load data:", err);
-        setError('Failed to load products. The rebellion will be delayed.');
+        setError('Failed to load products.');
       } finally {
         setIsLoading(false);
       }
@@ -64,10 +62,16 @@ export default function ProductListPage() {
           />
           <div className="relative">
             <FaSearch className="absolute left-3 top-3.5 text-light-gray" />
-            <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Search products..." className="w-full sm:w-64 pl-10 pr-4 py-2 rounded-full bg-dark-bg text-white placeholder-light-gray/70 border border-light-gray/20 focus:outline-none focus:ring-2 focus:ring-electric-blue" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search products..."
+              className="w-full sm:w-64 pl-10 pr-4 py-2 rounded-full bg-dark-bg text-white placeholder-light-gray/70 border border-light-gray/20 focus:outline-none focus:ring-2 focus:ring-electric-blue"
+            />
           </div>
         </div>
-        
+
         {isLoading && <p className="text-center text-2xl font-bold text-electric-blue">Charging the Glow...</p>}
         {error && <p className="text-center text-red-400 text-lg">{error}</p>}
         {!isLoading && !error && (
