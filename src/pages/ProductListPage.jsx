@@ -19,8 +19,8 @@ export default function ProductListPage() {
       setIsLoading(true);
       setError(null);
       try {
-        const productsRes = await api.get('/products/items');
-        const categoriesRes = await api.get('/products/categories');
+        const productsRes = await api.get('/products/');
+        const categoriesRes = await api.get('/categories/');
 
         const productData = Array.isArray(productsRes.data)
           ? productsRes.data
