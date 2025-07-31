@@ -77,7 +77,7 @@ function CheckoutPage() {
 
       try {
         setStep('processing');
-        const stkResponse = await fetch('${import.meta.env.VITE_BACKEND_URL}/api/payments/stk-push/', {
+        const stkResponse = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/payments/stk-push/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
