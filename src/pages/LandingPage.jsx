@@ -13,7 +13,7 @@ export default function LandingPage() {
 
   const handleAuth = async (e) => {
     e.preventDefault();
-    const endpoint = formType === 'login' ? '/api/auth/login/' : '/api/auth/register/';
+    const endpoint = formType === 'login' ? '/auth/login/' : '/auth/register/';
     const payload = formType === 'login' ? { email, password } : { email, username, password };
 
     try {
@@ -36,7 +36,7 @@ export default function LandingPage() {
   const handleGoogleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {
       try {
-        const response = await api.post('/api/auth/google/', { code: codeResponse.code });
+        const response = await api.post('/auth/google/', { code: codeResponse.code });
         localStorage.setItem('accessToken', response.data.access);
         localStorage.setItem('refreshToken', response.data.refresh);
         api.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
