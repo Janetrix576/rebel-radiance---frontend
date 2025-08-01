@@ -1,4 +1,3 @@
-src/api.js
 import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'https://rebel-radiance-backend.onrender.com';
