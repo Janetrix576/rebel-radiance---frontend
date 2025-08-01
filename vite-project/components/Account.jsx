@@ -14,7 +14,7 @@ function Account() {
   const fetchHistory = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:8000/api/history/");
+      const res = await axios.get(`http://localhost:8000/orders/${customerId}/`);
       setHistory(res.data);
       setFiltered(res.data);
     } catch (err) {
