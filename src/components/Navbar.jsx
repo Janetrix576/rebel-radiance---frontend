@@ -50,7 +50,7 @@ function Navbar() {
           {isLoggedIn ? (
             <button onClick={handleLogout} className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">Logout</button>
           ) : (
-            <Link to="/login" className="bg-electric-blue hover:opacity-90 text-dark-bg font-bold py-2 px-4 rounded-lg transition-colors">Login</Link>
+            <Link to="/login" className="bg-electric-blue hover:opacity-90 text-dark-bg font-bold py-2 px-4 rounded-lg transition-colors">Logout</Link>
           )}
         </nav>
       </div>
