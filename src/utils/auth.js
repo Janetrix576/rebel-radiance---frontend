@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://rebel-radiance-backend.onrender.com/api/', 
+  baseURL: 'https://rebel-radiance-backend.onrender.com/api/',
 });
 
 api.interceptors.request.use(
