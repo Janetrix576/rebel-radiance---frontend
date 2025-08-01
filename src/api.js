@@ -1,7 +1,10 @@
+src/api.js
 import axios from 'axios';
-const API_BASE_URL= 'https://rebel-radiance-backend.onrender.com'
+
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL || 'https://rebel-radiance-backend.onrender.com';
+
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/`,
+  baseURL: `${API_BASE_URL}/api/`,
   headers: {
     'Content-Type': 'application/json',
   },
